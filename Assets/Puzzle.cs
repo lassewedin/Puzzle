@@ -11,7 +11,7 @@ public class Puzzle : MonoBehaviour {
         InitiatePuzzle();
 
         World testWorld = new World();
-        slot[0].PlaceInWorld(piece[0], 0, 3, testWorld);
+        slot[5].PlaceInWorld(piece[0], 0, 0, testWorld);
 
         visualWorld.Set(testWorld);
     }
@@ -30,6 +30,7 @@ public class Puzzle : MonoBehaviour {
 
     private void CreateSlots() {
         {
+            //x bottom
             BaseTransform bt = new BaseTransform();
             bt.xAxisWorldX = 1; bt.yAxisWorldX = 0; bt.zAxisWorldX = 0; bt.origoWorldX = 0;
             bt.xAxisWorldY = 0; bt.yAxisWorldY = 1; bt.zAxisWorldY = 0; bt.origoWorldY = 1;
@@ -38,42 +39,47 @@ public class Puzzle : MonoBehaviour {
         }
 
         {
+            //x top
             BaseTransform bt = new BaseTransform();
             bt.xAxisWorldX = 1; bt.yAxisWorldX = 0; bt.zAxisWorldX = 0; bt.origoWorldX = 0;
-            bt.xAxisWorldY = 0; bt.yAxisWorldY = 1; bt.zAxisWorldY = 0; bt.origoWorldY = 0;
-            bt.xAxisWorldZ = 0; bt.yAxisWorldZ = 0; bt.zAxisWorldZ = 1; bt.origoWorldZ = 0;
+            bt.xAxisWorldY = 0; bt.yAxisWorldY = 1; bt.zAxisWorldY = 0; bt.origoWorldY = 3;
+            bt.xAxisWorldZ = 0; bt.yAxisWorldZ = 0; bt.zAxisWorldZ = 1; bt.origoWorldZ = 2;
             slot[1] = new Slot(1, bt);
         }
 
         {
+            //y near
             BaseTransform bt = new BaseTransform();
-            bt.xAxisWorldX = 1; bt.yAxisWorldX = 0; bt.zAxisWorldX = 0; bt.origoWorldX = 0;
-            bt.xAxisWorldY = 0; bt.yAxisWorldY = 1; bt.zAxisWorldY = 0; bt.origoWorldY = 0;
-            bt.xAxisWorldZ = 0; bt.yAxisWorldZ = 0; bt.zAxisWorldZ = 1; bt.origoWorldZ = 0;
+            bt.xAxisWorldX = 0; bt.yAxisWorldX = -1; bt.zAxisWorldX = 0; bt.origoWorldX = 3;
+            bt.xAxisWorldY = 1; bt.yAxisWorldY = 0;  bt.zAxisWorldY = 0; bt.origoWorldY = 0;
+            bt.xAxisWorldZ = 0; bt.yAxisWorldZ = 0;  bt.zAxisWorldZ = 1; bt.origoWorldZ = 1;
             slot[2] = new Slot(2, bt);
         }
 
         {
+            //y far
             BaseTransform bt = new BaseTransform();
-            bt.xAxisWorldX = 1; bt.yAxisWorldX = 0; bt.zAxisWorldX = 0; bt.origoWorldX = 0;
-            bt.xAxisWorldY = 0; bt.yAxisWorldY = 1; bt.zAxisWorldY = 0; bt.origoWorldY = 0;
-            bt.xAxisWorldZ = 0; bt.yAxisWorldZ = 0; bt.zAxisWorldZ = 1; bt.origoWorldZ = 0;
+            bt.xAxisWorldX = 0; bt.yAxisWorldX = -1; bt.zAxisWorldX = 0; bt.origoWorldX = 3;
+            bt.xAxisWorldY = 1; bt.yAxisWorldY = 0;  bt.zAxisWorldY = 0; bt.origoWorldY = 0;
+            bt.xAxisWorldZ = 0; bt.yAxisWorldZ = 0;  bt.zAxisWorldZ = 1; bt.origoWorldZ = 3;
             slot[3] = new Slot(3, bt);
         }
 
         {
+            //z left
             BaseTransform bt = new BaseTransform();
-            bt.xAxisWorldX = 1; bt.yAxisWorldX = 0; bt.zAxisWorldX = 0; bt.origoWorldX = 0;
-            bt.xAxisWorldY = 0; bt.yAxisWorldY = 1; bt.zAxisWorldY = 0; bt.origoWorldY = 0;
-            bt.xAxisWorldZ = 0; bt.yAxisWorldZ = 0; bt.zAxisWorldZ = 1; bt.origoWorldZ = 0;
+            bt.xAxisWorldX = 0;  bt.yAxisWorldX = 0; bt.zAxisWorldX = -1; bt.origoWorldX = 2;
+            bt.xAxisWorldY = 0;  bt.yAxisWorldY = 1; bt.zAxisWorldY = 0;  bt.origoWorldY = 2;
+            bt.xAxisWorldZ = 1;  bt.yAxisWorldZ = 0; bt.zAxisWorldZ = 0;  bt.origoWorldZ = 0;
             slot[4] = new Slot(4, bt);
         }
 
         {
+            //z right
             BaseTransform bt = new BaseTransform();
-            bt.xAxisWorldX = 1; bt.yAxisWorldX = 0; bt.zAxisWorldX = 0; bt.origoWorldX = 0;
-            bt.xAxisWorldY = 0; bt.yAxisWorldY = 1; bt.zAxisWorldY = 0; bt.origoWorldY = 0;
-            bt.xAxisWorldZ = 0; bt.yAxisWorldZ = 0; bt.zAxisWorldZ = 1; bt.origoWorldZ = 0;
+            bt.xAxisWorldX = 0; bt.yAxisWorldX = 0; bt.zAxisWorldX = -1; bt.origoWorldX = 4;
+            bt.xAxisWorldY = 0; bt.yAxisWorldY = 1; bt.zAxisWorldY = 0;  bt.origoWorldY = 2;
+            bt.xAxisWorldZ = 1; bt.yAxisWorldZ = 0; bt.zAxisWorldZ = 0;  bt.origoWorldZ = 0;
             slot[5] = new Slot(5, bt);
         }
     }
@@ -147,9 +153,7 @@ public class Puzzle : MonoBehaviour {
 
         return false;
     }
-
-
-
+    
     private void PutPieceInWorld(World space, Slot slot, Piece piece, int rotateX, int rotateY) {
 
     }
