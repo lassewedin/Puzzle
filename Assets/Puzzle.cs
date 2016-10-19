@@ -11,8 +11,11 @@ public class Puzzle : MonoBehaviour {
         InitiatePuzzle();
 
         World testWorld = new World();
-        slot[5].PlaceInWorld(piece[0], 0, 0, testWorld);
+        bool can0 = slot[0].TryPlaceInWorld(piece[4], 0, 0, testWorld);
+        bool can1 = slot[1].TryPlaceInWorld(piece[5], 0, 0, testWorld);
 
+        bool can2 = slot[2].TryPlaceInWorld(piece[0], 0, 0, testWorld);
+        //slot[2].ForcePlaceInWorld(piece[0], 0, 1, testWorld);
         visualWorld.Set(testWorld);
     }
 
@@ -88,64 +91,70 @@ public class Puzzle : MonoBehaviour {
         {
             int[,,] shape = new int[6, 2, 2];
             shape[0, 0, 1] = 1; shape[1, 0, 1] = 1; shape[2, 0, 1] = 1; shape[3, 0, 1] = 1; shape[4, 0, 1] = 1; shape[5, 0, 1] = 1; //bottom, far
-            shape[0, 0, 0] = 1; shape[1, 0, 0] = 1; shape[2, 0, 0] = 1; shape[3, 0, 0] = 1; shape[4, 0, 0] = 1; shape[5, 0, 0] = 1; //bottom, near
+            shape[0, 0, 0] = 1; shape[1, 0, 0] = 1; shape[2, 0, 0] = 0; shape[3, 0, 0] = 0; shape[4, 0, 0] = 1; shape[5, 0, 0] = 1; //bottom, near
 
-            shape[0, 1, 1] = 1; shape[1, 1, 1] = 0; shape[2, 1, 1] = 0; shape[3, 1, 1] = 0; shape[4, 1, 1] = 0; shape[5, 1, 1] = 0; //top, far
-            shape[0, 1, 0] = 1; shape[1, 1, 0] = 1; shape[2, 1, 0] = 1; shape[3, 1, 0] = 0; shape[4, 1, 0] = 0; shape[5, 1, 0] = 0; //top, near
-            
+            shape[0, 1, 1] = 1; shape[1, 1, 1] = 0; shape[2, 1, 1] = 0; shape[3, 1, 1] = 0; shape[4, 1, 1] = 0; shape[5, 1, 1] = 1; //top, far
+            shape[0, 1, 0] = 1; shape[1, 1, 0] = 0; shape[2, 1, 0] = 0; shape[3, 1, 0] = 0; shape[4, 1, 0] = 0; shape[5, 1, 0] = 1; //top, near
 
             piece[0] = new Piece(0, shape);
         }
 
         {
             int[,,] shape = new int[6, 2, 2];
-            shape[0, 0, 0] = 1; shape[1, 0, 0] = 1; shape[2, 0, 0] = 1; shape[3, 0, 0] = 1; shape[4, 0, 0] = 1; shape[5, 0, 0] = 1;
-            shape[0, 1, 0] = 1; shape[1, 1, 0] = 1; shape[2, 1, 0] = 1; shape[3, 1, 0] = 1; shape[4, 1, 0] = 1; shape[5, 1, 0] = 1;
-            shape[0, 0, 1] = 1; shape[1, 0, 1] = 0; shape[2, 0, 1] = 0; shape[3, 0, 1] = 0; shape[4, 0, 1] = 0; shape[5, 0, 1] = 1;
-            shape[0, 1, 1] = 1; shape[1, 1, 1] = 0; shape[2, 1, 1] = 0; shape[3, 1, 1] = 0; shape[4, 1, 1] = 0; shape[5, 1, 1] = 1;
+            shape[0, 0, 1] = 1; shape[1, 0, 1] = 1; shape[2, 0, 1] = 1; shape[3, 0, 1] = 1; shape[4, 0, 1] = 1; shape[5, 0, 1] = 1; //bottom, far
+            shape[0, 0, 0] = 1; shape[1, 0, 0] = 0; shape[2, 0, 0] = 0; shape[3, 0, 0] = 0; shape[4, 0, 0] = 0; shape[5, 0, 0] = 1; //bottom, near
+
+            shape[0, 1, 1] = 1; shape[1, 1, 1] = 1; shape[2, 1, 1] = 0; shape[3, 1, 1] = 1; shape[4, 1, 1] = 1; shape[5, 1, 1] = 1; //top, far
+            shape[0, 1, 0] = 1; shape[1, 1, 0] = 0; shape[2, 1, 0] = 0; shape[3, 1, 0] = 0; shape[4, 1, 0] = 0; shape[5, 1, 0] = 1; //top, near
 
             piece[1] = new Piece(1, shape);
         }
 
         {
             int[,,] shape = new int[6, 2, 2];
-            shape[0, 0, 0] = 1; shape[1, 0, 0] = 1; shape[2, 0, 0] = 1; shape[3, 0, 0] = 1; shape[4, 0, 0] = 1; shape[5, 0, 0] = 1;
-            shape[0, 1, 0] = 1; shape[1, 1, 0] = 1; shape[2, 1, 0] = 1; shape[3, 1, 0] = 1; shape[4, 1, 0] = 1; shape[5, 1, 0] = 1;
-            shape[0, 0, 1] = 1; shape[1, 0, 1] = 0; shape[2, 0, 1] = 0; shape[3, 0, 1] = 0; shape[4, 0, 1] = 0; shape[5, 0, 1] = 1;
-            shape[0, 1, 1] = 1; shape[1, 1, 1] = 0; shape[2, 1, 1] = 0; shape[3, 1, 1] = 0; shape[4, 1, 1] = 0; shape[5, 1, 1] = 1;
+            shape[0, 0, 1] = 1; shape[1, 0, 1] = 1; shape[2, 0, 1] = 1; shape[3, 0, 1] = 1; shape[4, 0, 1] = 1; shape[5, 0, 1] = 1; //bottom, far
+            shape[0, 0, 0] = 1; shape[1, 0, 0] = 1; shape[2, 0, 0] = 1; shape[3, 0, 0] = 0; shape[4, 0, 0] = 0; shape[5, 0, 0] = 1; //bottom, near
+
+            shape[0, 1, 1] = 1; shape[1, 1, 1] = 1; shape[2, 1, 1] = 0; shape[3, 1, 1] = 0; shape[4, 1, 1] = 1; shape[5, 1, 1] = 1; //top, far
+            shape[0, 1, 0] = 1; shape[1, 1, 0] = 1; shape[2, 1, 0] = 0; shape[3, 1, 0] = 0; shape[4, 1, 0] = 0; shape[5, 1, 0] = 1; //top, near
 
             piece[2] = new Piece(2, shape);
         }
 
         {
             int[,,] shape = new int[6, 2, 2];
-            shape[0, 0, 0] = 1; shape[1, 0, 0] = 1; shape[2, 0, 0] = 1; shape[3, 0, 0] = 1; shape[4, 0, 0] = 1; shape[5, 0, 0] = 1;
-            shape[0, 1, 0] = 1; shape[1, 1, 0] = 1; shape[2, 1, 0] = 1; shape[3, 1, 0] = 1; shape[4, 1, 0] = 1; shape[5, 1, 0] = 1;
-            shape[0, 0, 1] = 1; shape[1, 0, 1] = 0; shape[2, 0, 1] = 0; shape[3, 0, 1] = 0; shape[4, 0, 1] = 0; shape[5, 0, 1] = 1;
-            shape[0, 1, 1] = 1; shape[1, 1, 1] = 0; shape[2, 1, 1] = 0; shape[3, 1, 1] = 0; shape[4, 1, 1] = 0; shape[5, 1, 1] = 1;
+            shape[0, 0, 1] = 1; shape[1, 0, 1] = 1; shape[2, 0, 1] = 1; shape[3, 0, 1] = 1; shape[4, 0, 1] = 1; shape[5, 0, 1] = 1; //bottom, far
+            shape[0, 0, 0] = 1; shape[1, 0, 0] = 1; shape[2, 0, 0] = 0; shape[3, 0, 0] = 0; shape[4, 0, 0] = 1; shape[5, 0, 0] = 1; //bottom, near
+
+            shape[0, 1, 1] = 1; shape[1, 1, 1] = 1; shape[2, 1, 1] = 1; shape[3, 1, 1] = 0; shape[4, 1, 1] = 0; shape[5, 1, 1] = 1; //top, far
+            shape[0, 1, 0] = 1; shape[1, 1, 0] = 0; shape[2, 1, 0] = 0; shape[3, 1, 0] = 0; shape[4, 1, 0] = 0; shape[5, 1, 0] = 1; //top, near
 
             piece[3] = new Piece(3, shape);
         }
 
         {
-            int[,,] shape = new int[6, 2, 2];
-            shape[0, 0, 0] = 1; shape[1, 0, 0] = 1; shape[2, 0, 0] = 1; shape[3, 0, 0] = 1; shape[4, 0, 0] = 1; shape[5, 0, 0] = 1;
-            shape[0, 1, 0] = 1; shape[1, 1, 0] = 1; shape[2, 1, 0] = 1; shape[3, 1, 0] = 1; shape[4, 1, 0] = 1; shape[5, 1, 0] = 1;
-            shape[0, 0, 1] = 1; shape[1, 0, 1] = 0; shape[2, 0, 1] = 0; shape[3, 0, 1] = 0; shape[4, 0, 1] = 0; shape[5, 0, 1] = 1;
-            shape[0, 1, 1] = 1; shape[1, 1, 1] = 0; shape[2, 1, 1] = 0; shape[3, 1, 1] = 0; shape[4, 1, 1] = 0; shape[5, 1, 1] = 1;
+             int[,,] shape = new int[6, 2, 2];
+             shape[0, 0, 1] = 1; shape[1, 0, 1] = 1; shape[2, 0, 1] = 1; shape[3, 0, 1] = 1; shape[4, 0, 1] = 1; shape[5, 0, 1] = 1; //bottom, far
+             shape[0, 0, 0] = 1; shape[1, 0, 0] = 0; shape[2, 0, 0] = 1; shape[3, 0, 0] = 0; shape[4, 0, 0] = 0; shape[5, 0, 0] = 1; //bottom, near
 
-            piece[4] = new Piece(4, shape);
+             shape[0, 1, 1] = 1; shape[1, 1, 1] = 1; shape[2, 1, 1] = 1; shape[3, 1, 1] = 1; shape[4, 1, 1] = 1; shape[5, 1, 1] = 1; //top, far
+             shape[0, 1, 0] = 1; shape[1, 1, 0] = 0; shape[2, 1, 0] = 1; shape[3, 1, 0] = 0; shape[4, 1, 0] = 0; shape[5, 1, 0] = 1; //top, near
+
+             piece[4] = new Piece(1, shape);
         }
 
         {
             int[,,] shape = new int[6, 2, 2];
-            shape[0, 0, 0] = 1; shape[1, 0, 0] = 1; shape[2, 0, 0] = 1; shape[3, 0, 0] = 1; shape[4, 0, 0] = 1; shape[5, 0, 0] = 1;
-            shape[0, 1, 0] = 1; shape[1, 1, 0] = 1; shape[2, 1, 0] = 1; shape[3, 1, 0] = 1; shape[4, 1, 0] = 1; shape[5, 1, 0] = 1;
-            shape[0, 0, 1] = 1; shape[1, 0, 1] = 0; shape[2, 0, 1] = 0; shape[3, 0, 1] = 0; shape[4, 0, 1] = 0; shape[5, 0, 1] = 1;
-            shape[0, 1, 1] = 1; shape[1, 1, 1] = 0; shape[2, 1, 1] = 0; shape[3, 1, 1] = 0; shape[4, 1, 1] = 0; shape[5, 1, 1] = 1;
+            shape[0, 0, 1] = 1; shape[1, 0, 1] = 1; shape[2, 0, 1] = 1; shape[3, 0, 1] = 1; shape[4, 0, 1] = 1; shape[5, 0, 1] = 1; //bottom, far
+            shape[0, 0, 0] = 1; shape[1, 0, 0] = 1; shape[2, 0, 0] = 1; shape[3, 0, 0] = 1; shape[4, 0, 0] = 1; shape[5, 0, 0] = 1; //bottom, near
+
+            shape[0, 1, 1] = 1; shape[1, 1, 1] = 1; shape[2, 1, 1] = 1; shape[3, 1, 1] = 1; shape[4, 1, 1] = 1; shape[5, 1, 1] = 1; //top, far
+            shape[0, 1, 0] = 1; shape[1, 1, 0] = 1; shape[2, 1, 0] = 1; shape[3, 1, 0] = 1; shape[4, 1, 0] = 1; shape[5, 1, 0] = 1; //top, near
 
             piece[5] = new Piece(5, shape);
         }
+
+
     }
 
     private bool TryPlace(Slot slot, Piece piece, bool[] usedPieces, Space space) {
