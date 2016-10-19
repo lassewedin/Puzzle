@@ -3,6 +3,10 @@
 public class VisualWorld : MonoBehaviour {
 
     public GameObject cubePrefab;
+    public bool showEmptySpaceCubelets = false;
+
+    public Color colorEmpty;
+    public Color[] colorPiece;
 
     private int[,,] logic = new int[6, 6, 6];
     private GameObject[,,] visual = new GameObject[6, 6, 6];
@@ -28,7 +32,7 @@ public class VisualWorld : MonoBehaviour {
         for (int z = 0; z < 6; z++) {
             for (int y = 0; y < 6; y++) {
                 for (int x = 0; x < 6; x++) {
-                    logic[x, y, z] = 0;
+                    logic[x, y, z] = -1; // empty
                 }
             }
         }
@@ -57,11 +61,14 @@ public class VisualWorld : MonoBehaviour {
             for (int y = 0; y < 6; y++) {
                 for (int x = 0; x < 6; x++) {
                     //visual[x, y, z].gameObject.SetActive(logic[x, y, z] != 0);
-                    if (logic[x, y, z] != 0) {
+                    if (logic[x, y, z] != -1) {
                         visual[x, y, z].gameObject.transform.localScale = new Vector3(0.99f, 0.99f, 0.99f);
+                        visual[x, y, z].gameObject.GetComponent<MeshRenderer>().material.color = colorPiece[logic[x, y, z]];
                     }
                     else {
-                        visual[x, y, z].gameObject.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                        visual[x, y, z].gameObject.SetActive(showEmptySpaceCubelets);
+                        visual[x, y, z].gameObject.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+                        visual[x, y, z].gameObject.GetComponent<MeshRenderer>().material.color = colorEmpty;
                     }
                 }
             }

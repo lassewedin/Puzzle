@@ -11,7 +11,7 @@ public class Puzzle : MonoBehaviour {
         InitiatePuzzle();
 
         World testWorld = new World();
-        slot[0].PlaceInWorld(piece[0], 0, 0, testWorld);
+        slot[0].PlaceInWorld(piece[0], 0, 3, testWorld);
 
         visualWorld.Set(testWorld);
     }
@@ -81,10 +81,12 @@ public class Puzzle : MonoBehaviour {
     private void CreatePieces() {
         {
             int[,,] shape = new int[6, 2, 2];
-            shape[0, 0, 0] = 1; shape[1, 0, 0] = 1; shape[2, 0, 0] = 1; shape[3, 0, 0] = 1; shape[4, 0, 0] = 1; shape[5, 0, 0] = 1;
-            shape[0, 1, 0] = 1; shape[1, 1, 0] = 1; shape[2, 1, 0] = 1; shape[3, 1, 0] = 1; shape[4, 1, 0] = 1; shape[5, 1, 0] = 1;
-            shape[0, 0, 1] = 1; shape[1, 0, 1] = 0; shape[2, 0, 1] = 0; shape[3, 0, 1] = 0; shape[4, 0, 1] = 0; shape[5, 0, 1] = 1;
-            shape[0, 1, 1] = 1; shape[1, 1, 1] = 0; shape[2, 1, 1] = 0; shape[3, 1, 1] = 0; shape[4, 1, 1] = 0; shape[5, 1, 1] = 1;
+            shape[0, 0, 1] = 1; shape[1, 0, 1] = 1; shape[2, 0, 1] = 1; shape[3, 0, 1] = 1; shape[4, 0, 1] = 1; shape[5, 0, 1] = 1; //bottom, far
+            shape[0, 0, 0] = 1; shape[1, 0, 0] = 1; shape[2, 0, 0] = 1; shape[3, 0, 0] = 1; shape[4, 0, 0] = 1; shape[5, 0, 0] = 1; //bottom, near
+
+            shape[0, 1, 1] = 1; shape[1, 1, 1] = 0; shape[2, 1, 1] = 0; shape[3, 1, 1] = 0; shape[4, 1, 1] = 0; shape[5, 1, 1] = 0; //top, far
+            shape[0, 1, 0] = 1; shape[1, 1, 0] = 1; shape[2, 1, 0] = 1; shape[3, 1, 0] = 0; shape[4, 1, 0] = 0; shape[5, 1, 0] = 0; //top, near
+            
 
             piece[0] = new Piece(0, shape);
         }

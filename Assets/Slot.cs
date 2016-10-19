@@ -25,9 +25,9 @@
         return false;
     } 
 
-    public void PlaceInWorld(Piece piece, int rotateX, int rotateY, World world) {
+    public void PlaceInWorld(Piece piece, int rotateY, int rotateX, World world) {
 
-        int[,,] rotated = piece.GetShape(rotateX, rotateY);
+        int[,,] rotated = piece.GetShape(rotateY, rotateX);
         for (int z = 0; z < 2; z++) {
             for (int y = 0; y < 2; y++) {
                 for (int x = 0; x < 6; x++) {
