@@ -3,32 +3,64 @@
 public class Puzzle : MonoBehaviour {
     public VisualWorld visualWorld;
 
-    private Slot[] slot = new Slot[6];
-    private Piece[] piece = new Piece[6];
-    private bool[] usedPieces = new bool[6];
+    private Slot[] slots = new Slot[6];
+    private PieceSet pieceSet = new PieceSet();
+
+    private World world = new World();
 
     void Start() {
         InitiatePuzzle();
 
-        World testWorld = new World();
-        bool can0 = slot[0].TryPlaceInWorld(piece[4], 0, 0, testWorld);
-        bool can1 = slot[1].TryPlaceInWorld(piece[5], 0, 0, testWorld);
+        //World testWorld = new World();
+        //bool can0 = slot[0].TryPlaceInWorld(PieceSet.GetPiece(4), 0, 0, world);
+        //bool can1 = slot[1].TryPlaceInWorld(PieceSet.GetPiece(5), 0, 0, world);
 
-        bool can2 = slot[2].TryPlaceInWorld(piece[0], 0, 0, testWorld);
+        //bool can2 = slot[2].TryPlaceInWorld(PieceSet.GetPiece(0), 0, 1, world);
         //slot[2].ForcePlaceInWorld(piece[0], 0, 1, testWorld);
-        visualWorld.Set(testWorld);
+        visualWorld.Set(world);
+
+        if (TryFillSlot(slots[0], pieceSet, world)) {
+            Debug.Log("Piece of cake!");
+        }
+        else {
+            Debug.Log("No can do!");
+        }
+    }
+
+    private bool TryFillSlot(Slot slot, PieceSet pieceSet, World world) {
+        for (int pieceIndex = 0; pieceIndex < 6; pieceIndex++) {
+            if (pieceSet.IsAvailable(pieceIndex)) {
+                for (int rotateY = 0; rotateY < 1; rotateY++) {
+                    for (int rotateX = 0; rotateX < 4; rotateX++) {
+                        if (slot.CanPlaceInWorld(PieceSet.GetPiece(pieceIndex), rotateY, rotateX, world)) {
+                            //push
+                            Slot subSlot = slots[slot.index + 1];
+                            PieceSet subPieceSet = new PieceSet(pieceSet);
+                            subPieceSet.SetAvailable(pieceIndex, false);
+                            World subWorld = new World(world);
+                            bool ok = slot.TryPlaceInWorld(PieceSet.GetPiece(pieceIndex), rotateY, rotateX, subWorld);
+                            if (!ok) {
+                                Debug.Log("Ooooops!");
+                            }
+                            visualWorld.Set(subWorld);
+                            visualWorld.ForceUpdate();
+                            if (subSlot.index > 5) {
+                                return true;
+                            }
+                            if (TryFillSlot(subSlot, subPieceSet, subWorld)) {
+                                return true;
+                            }
+                            //pop
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private void InitiatePuzzle() {
-        CreateFreePieces();
         CreateSlots();
-        CreatePieces();
-    }
-
-    private void CreateFreePieces() {
-        for (int index = 0; index < 6; index++) {
-            usedPieces[index] = false;
-        }
     }
 
     private void CreateSlots() {
@@ -38,7 +70,7 @@ public class Puzzle : MonoBehaviour {
             bt.xAxisWorldX = 1; bt.yAxisWorldX = 0; bt.zAxisWorldX = 0; bt.origoWorldX = 0;
             bt.xAxisWorldY = 0; bt.yAxisWorldY = 1; bt.zAxisWorldY = 0; bt.origoWorldY = 1;
             bt.xAxisWorldZ = 0; bt.yAxisWorldZ = 0; bt.zAxisWorldZ = 1; bt.origoWorldZ = 2;
-            slot[0] = new Slot(0, bt);
+            slots[0] = new Slot(0, bt);
         }
 
         {
@@ -47,7 +79,7 @@ public class Puzzle : MonoBehaviour {
             bt.xAxisWorldX = 1; bt.yAxisWorldX = 0; bt.zAxisWorldX = 0; bt.origoWorldX = 0;
             bt.xAxisWorldY = 0; bt.yAxisWorldY = 1; bt.zAxisWorldY = 0; bt.origoWorldY = 3;
             bt.xAxisWorldZ = 0; bt.yAxisWorldZ = 0; bt.zAxisWorldZ = 1; bt.origoWorldZ = 2;
-            slot[1] = new Slot(1, bt);
+            slots[1] = new Slot(1, bt);
         }
 
         {
@@ -56,7 +88,7 @@ public class Puzzle : MonoBehaviour {
             bt.xAxisWorldX = 0; bt.yAxisWorldX = -1; bt.zAxisWorldX = 0; bt.origoWorldX = 3;
             bt.xAxisWorldY = 1; bt.yAxisWorldY = 0;  bt.zAxisWorldY = 0; bt.origoWorldY = 0;
             bt.xAxisWorldZ = 0; bt.yAxisWorldZ = 0;  bt.zAxisWorldZ = 1; bt.origoWorldZ = 1;
-            slot[2] = new Slot(2, bt);
+            slots[2] = new Slot(2, bt);
         }
 
         {
@@ -65,7 +97,7 @@ public class Puzzle : MonoBehaviour {
             bt.xAxisWorldX = 0; bt.yAxisWorldX = -1; bt.zAxisWorldX = 0; bt.origoWorldX = 3;
             bt.xAxisWorldY = 1; bt.yAxisWorldY = 0;  bt.zAxisWorldY = 0; bt.origoWorldY = 0;
             bt.xAxisWorldZ = 0; bt.yAxisWorldZ = 0;  bt.zAxisWorldZ = 1; bt.origoWorldZ = 3;
-            slot[3] = new Slot(3, bt);
+            slots[3] = new Slot(3, bt);
         }
 
         {
@@ -74,7 +106,7 @@ public class Puzzle : MonoBehaviour {
             bt.xAxisWorldX = 0;  bt.yAxisWorldX = 0; bt.zAxisWorldX = -1; bt.origoWorldX = 2;
             bt.xAxisWorldY = 0;  bt.yAxisWorldY = 1; bt.zAxisWorldY = 0;  bt.origoWorldY = 2;
             bt.xAxisWorldZ = 1;  bt.yAxisWorldZ = 0; bt.zAxisWorldZ = 0;  bt.origoWorldZ = 0;
-            slot[4] = new Slot(4, bt);
+            slots[4] = new Slot(4, bt);
         }
 
         {
@@ -83,87 +115,7 @@ public class Puzzle : MonoBehaviour {
             bt.xAxisWorldX = 0; bt.yAxisWorldX = 0; bt.zAxisWorldX = -1; bt.origoWorldX = 4;
             bt.xAxisWorldY = 0; bt.yAxisWorldY = 1; bt.zAxisWorldY = 0;  bt.origoWorldY = 2;
             bt.xAxisWorldZ = 1; bt.yAxisWorldZ = 0; bt.zAxisWorldZ = 0;  bt.origoWorldZ = 0;
-            slot[5] = new Slot(5, bt);
+            slots[5] = new Slot(5, bt);
         }
-    }
-
-    private void CreatePieces() {
-        {
-            int[,,] shape = new int[6, 2, 2];
-            shape[0, 0, 1] = 1; shape[1, 0, 1] = 1; shape[2, 0, 1] = 1; shape[3, 0, 1] = 1; shape[4, 0, 1] = 1; shape[5, 0, 1] = 1; //bottom, far
-            shape[0, 0, 0] = 1; shape[1, 0, 0] = 1; shape[2, 0, 0] = 0; shape[3, 0, 0] = 0; shape[4, 0, 0] = 1; shape[5, 0, 0] = 1; //bottom, near
-
-            shape[0, 1, 1] = 1; shape[1, 1, 1] = 0; shape[2, 1, 1] = 0; shape[3, 1, 1] = 0; shape[4, 1, 1] = 0; shape[5, 1, 1] = 1; //top, far
-            shape[0, 1, 0] = 1; shape[1, 1, 0] = 0; shape[2, 1, 0] = 0; shape[3, 1, 0] = 0; shape[4, 1, 0] = 0; shape[5, 1, 0] = 1; //top, near
-
-            piece[0] = new Piece(0, shape);
-        }
-
-        {
-            int[,,] shape = new int[6, 2, 2];
-            shape[0, 0, 1] = 1; shape[1, 0, 1] = 1; shape[2, 0, 1] = 1; shape[3, 0, 1] = 1; shape[4, 0, 1] = 1; shape[5, 0, 1] = 1; //bottom, far
-            shape[0, 0, 0] = 1; shape[1, 0, 0] = 0; shape[2, 0, 0] = 0; shape[3, 0, 0] = 0; shape[4, 0, 0] = 0; shape[5, 0, 0] = 1; //bottom, near
-
-            shape[0, 1, 1] = 1; shape[1, 1, 1] = 1; shape[2, 1, 1] = 0; shape[3, 1, 1] = 1; shape[4, 1, 1] = 1; shape[5, 1, 1] = 1; //top, far
-            shape[0, 1, 0] = 1; shape[1, 1, 0] = 0; shape[2, 1, 0] = 0; shape[3, 1, 0] = 0; shape[4, 1, 0] = 0; shape[5, 1, 0] = 1; //top, near
-
-            piece[1] = new Piece(1, shape);
-        }
-
-        {
-            int[,,] shape = new int[6, 2, 2];
-            shape[0, 0, 1] = 1; shape[1, 0, 1] = 1; shape[2, 0, 1] = 1; shape[3, 0, 1] = 1; shape[4, 0, 1] = 1; shape[5, 0, 1] = 1; //bottom, far
-            shape[0, 0, 0] = 1; shape[1, 0, 0] = 1; shape[2, 0, 0] = 1; shape[3, 0, 0] = 0; shape[4, 0, 0] = 0; shape[5, 0, 0] = 1; //bottom, near
-
-            shape[0, 1, 1] = 1; shape[1, 1, 1] = 1; shape[2, 1, 1] = 0; shape[3, 1, 1] = 0; shape[4, 1, 1] = 1; shape[5, 1, 1] = 1; //top, far
-            shape[0, 1, 0] = 1; shape[1, 1, 0] = 1; shape[2, 1, 0] = 0; shape[3, 1, 0] = 0; shape[4, 1, 0] = 0; shape[5, 1, 0] = 1; //top, near
-
-            piece[2] = new Piece(2, shape);
-        }
-
-        {
-            int[,,] shape = new int[6, 2, 2];
-            shape[0, 0, 1] = 1; shape[1, 0, 1] = 1; shape[2, 0, 1] = 1; shape[3, 0, 1] = 1; shape[4, 0, 1] = 1; shape[5, 0, 1] = 1; //bottom, far
-            shape[0, 0, 0] = 1; shape[1, 0, 0] = 1; shape[2, 0, 0] = 0; shape[3, 0, 0] = 0; shape[4, 0, 0] = 1; shape[5, 0, 0] = 1; //bottom, near
-
-            shape[0, 1, 1] = 1; shape[1, 1, 1] = 1; shape[2, 1, 1] = 1; shape[3, 1, 1] = 0; shape[4, 1, 1] = 0; shape[5, 1, 1] = 1; //top, far
-            shape[0, 1, 0] = 1; shape[1, 1, 0] = 0; shape[2, 1, 0] = 0; shape[3, 1, 0] = 0; shape[4, 1, 0] = 0; shape[5, 1, 0] = 1; //top, near
-
-            piece[3] = new Piece(3, shape);
-        }
-
-        {
-             int[,,] shape = new int[6, 2, 2];
-             shape[0, 0, 1] = 1; shape[1, 0, 1] = 1; shape[2, 0, 1] = 1; shape[3, 0, 1] = 1; shape[4, 0, 1] = 1; shape[5, 0, 1] = 1; //bottom, far
-             shape[0, 0, 0] = 1; shape[1, 0, 0] = 0; shape[2, 0, 0] = 1; shape[3, 0, 0] = 0; shape[4, 0, 0] = 0; shape[5, 0, 0] = 1; //bottom, near
-
-             shape[0, 1, 1] = 1; shape[1, 1, 1] = 1; shape[2, 1, 1] = 1; shape[3, 1, 1] = 1; shape[4, 1, 1] = 1; shape[5, 1, 1] = 1; //top, far
-             shape[0, 1, 0] = 1; shape[1, 1, 0] = 0; shape[2, 1, 0] = 1; shape[3, 1, 0] = 0; shape[4, 1, 0] = 0; shape[5, 1, 0] = 1; //top, near
-
-             piece[4] = new Piece(1, shape);
-        }
-
-        {
-            int[,,] shape = new int[6, 2, 2];
-            shape[0, 0, 1] = 1; shape[1, 0, 1] = 1; shape[2, 0, 1] = 1; shape[3, 0, 1] = 1; shape[4, 0, 1] = 1; shape[5, 0, 1] = 1; //bottom, far
-            shape[0, 0, 0] = 1; shape[1, 0, 0] = 1; shape[2, 0, 0] = 1; shape[3, 0, 0] = 1; shape[4, 0, 0] = 1; shape[5, 0, 0] = 1; //bottom, near
-
-            shape[0, 1, 1] = 1; shape[1, 1, 1] = 1; shape[2, 1, 1] = 1; shape[3, 1, 1] = 1; shape[4, 1, 1] = 1; shape[5, 1, 1] = 1; //top, far
-            shape[0, 1, 0] = 1; shape[1, 1, 0] = 1; shape[2, 1, 0] = 1; shape[3, 1, 0] = 1; shape[4, 1, 0] = 1; shape[5, 1, 0] = 1; //top, near
-
-            piece[5] = new Piece(5, shape);
-        }
-
-
-    }
-
-    private bool TryPlace(Slot slot, Piece piece, bool[] usedPieces, Space space) {
-
-
-        return false;
-    }
-    
-    private void PutPieceInWorld(World space, Slot slot, Piece piece, int rotateX, int rotateY) {
-
     }
 }

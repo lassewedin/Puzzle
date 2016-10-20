@@ -56,6 +56,10 @@ public class VisualWorld : MonoBehaviour {
         }
     }
 
+    public void ForceUpdate() {
+        Update();
+    } 
+
     private void Update() {
         for (int z = 0; z < 6; z++) {
             for (int y = 0; y < 6; y++) {
